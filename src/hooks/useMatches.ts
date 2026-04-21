@@ -64,7 +64,7 @@ export const useSavePrediction = (leagueId: string | null) => {
             match_id: input.match_id,
             home_score: input.home_score,
             away_score: input.away_score,
-          },
+          } as never,
           { onConflict: "league_id,user_id,match_id" },
         );
       if (error) throw error;

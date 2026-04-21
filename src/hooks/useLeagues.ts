@@ -35,7 +35,7 @@ export const useCreateLeague = () => {
           max_members: input.max_members ?? 20,
           invite_code: generateInviteCode(),
           created_by: user!.id,
-        })
+        } as never)
         .select()
         .single();
       if (error) throw error;
@@ -49,7 +49,7 @@ export const useJoinLeague = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (code: string) => {
-      const { data, error } = await supabase.rpc("join_league_by_code", { _code: code });
+      const { data, error } = await supabase.rpc("join_league_by_code" as never, { _code: code } as never);
       if (error) throw error;
       return data as string;
     },

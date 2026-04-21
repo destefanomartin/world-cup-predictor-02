@@ -29,7 +29,7 @@ export const useSaveBonusBet = (leagueId: string | null) => {
       const { error } = await supabase
         .from("bonus_bets")
         .upsert(
-          { league_id: leagueId, user_id: user.id, kind: input.kind, pick: input.pick },
+          { league_id: leagueId, user_id: user.id, kind: input.kind, pick: input.pick } as never,
           { onConflict: "league_id,user_id,kind" },
         );
       if (error) throw error;
