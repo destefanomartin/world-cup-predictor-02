@@ -1,4 +1,4 @@
-import { Clock, Lock } from "lucide-react";
+import { Clock, Lock, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
@@ -107,7 +107,7 @@ export const MatchCard = ({ match, leagueId, prediction }: Props) => {
             value={home}
             onChange={(e) => setHome(e.target.value)}
             disabled={locked}
-            className="h-12 w-12 rounded-xl border-border/60 bg-background/50 text-center font-display text-xl font-bold focus-visible:border-primary focus-visible:ring-primary"
+            className="h-12 w-12 rounded-xl border-border/60 bg-background/50 text-center font-display text-xl font-bold focus-visible:border-primary focus-visible:ring-primary [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           />
           <span className="font-display text-xl font-bold text-muted-foreground">:</span>
           <Input
@@ -118,7 +118,7 @@ export const MatchCard = ({ match, leagueId, prediction }: Props) => {
             value={away}
             onChange={(e) => setAway(e.target.value)}
             disabled={locked}
-            className="h-12 w-12 rounded-xl border-border/60 bg-background/50 text-center font-display text-xl font-bold focus-visible:border-primary focus-visible:ring-primary"
+            className="h-12 w-12 rounded-xl border-border/60 bg-background/50 text-center font-display text-xl font-bold focus-visible:border-primary focus-visible:ring-primary [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           />
         </div>
 
@@ -138,7 +138,7 @@ export const MatchCard = ({ match, leagueId, prediction }: Props) => {
           disabled={save.isPending || home === "" || away === ""}
           className="mt-4 w-full bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground"
         >
-          {save.isPending ? "Saving..." : prediction ? "Update Prediction" : "Save Prediction"}
+          {save.isPending ? "Saving..." : prediction ? (<><Check className="mr-1 h-4 w-4" /> Update Prediction</>) : "Save Prediction"}
         </Button>
       )}
       {locked && match.home_score !== null && match.away_score !== null && (
