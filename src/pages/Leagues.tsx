@@ -18,9 +18,9 @@ const Leagues = () => {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const l = await createLeague.mutateAsync({ name });
+      const l: any = await createLeague.mutateAsync({ name });
       setName("");
-      toast({ title: "League created", description: `Invite code: ${l.invite_code}` });
+      toast({ title: "League created", description: `Invite code: ${l?.invite_code ?? ""}` });
     } catch (err) {
       toast({ title: "Error", description: (err as Error).message, variant: "destructive" });
     }
