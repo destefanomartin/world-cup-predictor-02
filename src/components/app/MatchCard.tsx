@@ -1,4 +1,4 @@
-import { Clock, Lock, Check } from "lucide-react";
+import { Clock, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
@@ -134,12 +134,11 @@ export const MatchCard = ({ match, leagueId, prediction }: Props) => {
 
       {!locked && (
         <Button
-          size="sm"
           onClick={handleSave}
           disabled={save.isPending || home === "" || away === ""}
           className="mt-4 w-full bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground"
         >
-          {save.isPending ? "Saving..." : prediction ? (<><Check className="mr-1 h-4 w-4" /> Update Prediction</>) : "Save Prediction"}
+          {save.isPending ? "Saving..." : prediction ? "Update Prediction" : "Save Prediction"}
         </Button>
       )}
       {locked && match.home_score !== null && match.away_score !== null && (

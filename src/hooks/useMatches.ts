@@ -11,7 +11,7 @@ export const useUpcomingMatches = () =>
         .select("*")
         .in("status", ["scheduled", "live"])
         .order("kickoff_at", { ascending: true })
-        .limit(12);
+        .limit(50);
       if (error) throw error;
       return data ?? [];
     },
@@ -26,7 +26,7 @@ export const useRecentMatches = () =>
         .select("*")
         .eq("status", "finished")
         .order("kickoff_at", { ascending: false })
-        .limit(8);
+        .limit(30);
       if (error) throw error;
       return data ?? [];
     },
