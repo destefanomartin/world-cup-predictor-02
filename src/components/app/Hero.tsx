@@ -1,14 +1,29 @@
 import { Button } from "@/components/ui/button";
 import { Sparkles, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 import heroImg from "@/assets/hero-stadium.jpg";
+import { useLeaderboard } from "@/hooks/useLeaderboard";
+import { useAuth } from "@/providers/AuthProvider";
 
-export const Hero = () => {
+export const Hero = ({ leagueId }: { leagueId: string | null }) => {
+  const { user } = useAuth();
+  // Traemos la tabla de posiciones de la liga actual
+  const { data: leaderboard = [] } = useLeaderboard(leagueId);
+
+  // Buscamos las estadísticas específicas del usuario logueado
+  const myStats = leaderboard.find((p: any) => p.user_id === user?.id);
+  
+  // Calculamos el ranking, puntos y plenos reales
+  const myRank = myStats ? leaderboard.findIndex((p: any) => p.user_id === user?.id) + 1 : "-";
+  const myPoints = myStats ? myStats.total_points : 0;
+  const myPerfects = myStats ? myStats.perfects : 0;
+
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0">
         <img
           src={heroImg}
-          alt="World Cup 2026 stadium at golden hour"
+          alt="Estadio del Mundial 2026"
           width={1920}
           height={1024}
           className="h-full w-full object-cover opacity-40"
@@ -19,27 +34,27 @@ export const Hero = () => {
         <div className="mx-auto max-w-3xl text-center animate-fade-up">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium text-primary">
             <Sparkles className="h-3.5 w-3.5" />
-            Private league · 12 friends · Season open
+            Prode Oficial · Temporada Abierta
           </div>
           <h1 className="font-display text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl">
-            Predict every match.
-            <span className="block bg-gradient-pitch bg-clip-text text-transparent">Outsmart your friends.</span>
+            Pronosticá cada partido.
+            <span className="block bg-gradient-pitch bg-clip-text text-transparent">Ganale a tus amigos.</span>
           </h1>
           <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground">
-            The most fun way to follow the FIFA World Cup 2026 with your crew. Score predictions, bonus bets, and a live leaderboard — all automated.
+            La forma más divertida de vivir el Mundial 2026. Cargá tus pronósticos, pegale a los resultados exactos y subí en el ranking en vivo.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button size="lg" className="bg-gradient-pitch text-primary-foreground shadow-glow hover:opacity-90">
-              Make Today's Picks
+            <Button asChild size="lg" className="bg-gradient-pitch text-primary-foreground shadow-glow hover:opacity-90">
+              <a href="#predictions">Cargar Pronósticos</a>
             </Button>
-            <Button size="lg" variant="outline" className="border-border/60 bg-card/50 backdrop-blur">
-              <Users className="mr-2 h-4 w-4" /> Invite Friends
+            <Button asChild size="lg" variant="outline" className="border-border/60 bg-card/50 backdrop-blur">
+              <Link to="/leagues"><Users className="mr-2 h-4 w-4" /> Invitar Amigos</Link>
             </Button>
           </div>
           <div className="mt-12 grid grid-cols-3 gap-6 border-t border-border/40 pt-8">
-            <Stat label="Your rank" value="#3" accent />
-            <Stat label="Total points" value="247" />
-            <Stat label="Perfects" value="6" />
+            <Stat label="Tu Posición" value={myRank !== "-" ? `#${myRank}` : "-"} accent />
+            <Stat label="Puntos Totales" value={myPoints.toString()} />
+            <Stat label="Plenos" value={myPerfects.toString()} />
           </div>
         </div>
       </div>

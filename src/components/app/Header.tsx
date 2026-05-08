@@ -11,7 +11,17 @@ export const Header = () => {
     .slice(0, 2)
     .map((s: string) => s[0]?.toUpperCase())
     .join("");
-    
+
+  const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+      // Actualizamos la URL para que quede lindo sin recargar
+      window.history.pushState(null, "", `#${id}`);
+    }
+  };
+  
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl">
       <div className="container flex h-16 items-center justify-between">
@@ -25,10 +35,10 @@ export const Header = () => {
           </div>
         </Link>
         <nav className="hidden items-center gap-6 md:flex">
-          <a href="#dashboard" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Inicio</a>
-          <a href="#predictions" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Pronósticos</a>
-          <a href="#leaderboard" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Ranking</a>
-          <Link to="/leagues" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Mis Ligas</Link>
+          <a href="#dashboard" onClick={(e) => scrollTo(e, 'dashboard')} className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary cursor-pointer">Inicio</a>
+          <a href="#predictions" onClick={(e) => scrollTo(e, 'predictions')} className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary cursor-pointer">Pronósticos</a>
+          <a href="#leaderboard" onClick={(e) => scrollTo(e, 'leaderboard')} className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary cursor-pointer">Ranking</a>
+          <Link to="/leagues" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary cursor-pointer">Mis Ligas</Link>
         </nav>
         <div className="flex items-center gap-2">
           <Button asChild variant="ghost" size="icon" className="md:hidden">

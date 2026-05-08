@@ -29,11 +29,24 @@ const Index = () => {
     return map;
   }, [predictions]);
 
+  // Lógica para agrupar los partidos por Fase/Grupo
+  const groupedUpcoming = useMemo(() => {
+    const groups: Record<string, any[]> = {};
+    upcoming.forEach((m: any) => {
+      // Usamos stage o group_name (depende de cómo se llame tu columna en Supabase)
+      const groupKey = m.stage || m.group_name || "Fase de Grupos";
+      if (!groups[groupKey]) groups[groupKey] = [];
+      groups[groupKey].push(m);
+    });
+    return groups;
+  }, [upcoming]);
+
   return (
     <div className="min-h-screen bg-background font-sans text-foreground">
       <Header />
       <main>
-        <Hero />
+        {/* Le pasamos el leagueId al Hero para que sepa de dónde sacar tus puntos */}
+        <Hero leagueId={leagueId} />
 
         {leagues.length > 1 && (
           <div className="container relative z-10 -mt-8 mb-4 flex items-center justify-end gap-2">
@@ -48,8 +61,8 @@ const Index = () => {
         )}
 
         {leagues.length === 0 && (
-          <div className="container">
-            <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 p-8 text-center">
+          <div className="container relative z-10 -mt-4">
+            <div className="rounded-2xl border border-dashed border-border/60 bg-card/90 backdrop-blur p-8 text-center">
               <h2 className="font-display text-xl font-bold">Unite o creá tu primera liga</h2>
               <p className="mt-1 text-sm text-muted-foreground">Necesitás estar en una liga para empezar a guardar tus pronósticos.</p>
               <Button asChild className="mt-4"><Link to="/leagues">Gestionar ligas</Link></Button>
@@ -57,7 +70,7 @@ const Index = () => {
           </div>
         )}
 
-        <section id="predictions" className="container py-16">
+        <section id="predictions" className="container py-16 scroll-mt-20">
           <div className="mb-8 flex items-end justify-between">
             <div>
               <div className="mb-2 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary">
@@ -67,23 +80,33 @@ const Index = () => {
               <p className="mt-1 text-sm text-muted-foreground">Cargá tus pronósticos antes de que empiece el partido.</p>
             </div>
           </div>
-          {upcoming.length === 0 ? (
+          
+          {Object.keys(groupedUpcoming).length === 0 ? (
             <p className="text-sm text-muted-foreground">No hay próximos partidos cargados en el fixture todavía.</p>
           ) : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {upcoming.map((m: any) => (
-                <MatchCard key={m.id} match={m} leagueId={leagueId} prediction={predByMatch.get(m.id)} />
+            <div className="space-y-12">
+              {Object.entries(groupedUpcoming).map(([groupName, matches]) => (
+                <div key={groupName}>
+                  <h3 className="mb-4 inline-block rounded-lg bg-secondary/30 px-4 py-1.5 font-display text-xl font-bold text-foreground">
+                    {groupName}
+                  </h3>
+                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    {matches.map((m: any) => (
+                      <MatchCard key={m.id} match={m} leagueId={leagueId} prediction={predByMatch.get(m.id)} />
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           )}
         </section>
 
-        <section id="dashboard" className="container grid gap-8 pb-16 lg:grid-cols-[1.4fr_1fr]">
-          <div id="leaderboard">
+        <section id="dashboard" className="container grid gap-8 pb-16 lg:grid-cols-[1.4fr_1fr] scroll-mt-20">
+          <div id="leaderboard" className="scroll-mt-20">
             <Leaderboard leagueId={leagueId} leagueName={currentLeague?.name} />
           </div>
           <div className="space-y-6">
-            <div id="bonus">
+            <div id="bonus" className="scroll-mt-20">
               <BonusBets leagueId={leagueId} />
             </div>
             <div className="rounded-2xl border border-border/60 bg-gradient-card p-5 shadow-elegant">
