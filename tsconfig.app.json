@@ -21,11 +21,9 @@
     "noImplicitAny": false,
     "noFallthroughCasesInSwitch": false,
 
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "react/jsx-runtime": ["./src/types/react-jsx-runtime"],
-      "lucide-react": ["./src/types/lucide-react"],
-      "@tanstack/react-query": ["./src/types/tanstack-react-query"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"]

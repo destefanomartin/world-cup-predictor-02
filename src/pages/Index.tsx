@@ -36,7 +36,7 @@ const Index = () => {
         <Hero />
 
         {leagues.length > 1 && (
-          <div className="container -mt-8 mb-4 flex items-center justify-end gap-2">
+          <div className="container relative z-10 -mt-8 mb-4 flex items-center justify-end gap-2">
             <span className="text-xs uppercase tracking-wider text-muted-foreground">Liga:</span>
             <Select value={leagueId ?? undefined} onValueChange={(v) => setLeagueId(v)}>
               <SelectTrigger className="w-56 bg-card/50"><SelectValue placeholder="Seleccionar liga" /></SelectTrigger>
