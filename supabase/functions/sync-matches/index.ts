@@ -2,20 +2,19 @@
 // Pulls FIFA World Cup 2026 fixtures + results from football-data.org and
 // upserts them into public.matches.
 //
-// Env required (set via `supabase secrets set ...`):
+// CAMBIO: se itera por stage para traer los 104 partidos completos
+// (la API tiene un límite de 50 por request en el free tier).
+//
+// Env required:
 //   FOOTBALL_DATA_TOKEN   – API token from https://www.football-data.org/client/register
 //   SUPABASE_URL          – auto-injected
 //   SUPABASE_SERVICE_ROLE_KEY – auto-injected
-//
-// Schedule daily after matches finish (e.g. cron `0 4 * * *` UTC).
-// Deploy: supabase functions deploy sync-matches --no-verify-jwt
 
 // @ts-expect-error Deno runtime imports
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 // @ts-expect-error Deno runtime imports
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-// football-data.org competition code for FIFA World Cup
 const COMPETITION = "WC";
 const API_BASE = "https://api.football-data.org/v4";
 
@@ -56,7 +55,24 @@ const STATUS_MAP: Record<string, string> = {
   SUSPENDED: "postponed",
 };
 
-serve(async (req) => {
+// Stages a traer. La fase de grupos se divide en matchdays para no superar el límite de 50.
+// football-data.org acepta ?matchday=N para GROUP_STAGE (3 jornadas × ~24 partidos c/u).
+const STAGE_REQUESTS = [
+  { stage: "GROUP_STAGE", matchday: 1 },
+  { stage: "GROUP_STAGE", matchday: 2 },
+  { stage: "GROUP_STAGE", matchday: 3 },
+  { stage: "ROUND_OF_32" },
+  { stage: "ROUND_OF_16" },
+  { stage: "QUARTER_FINALS" },
+  { stage: "SEMI_FINALS" },
+  { stage: "THIRD_PLACE" },
+  { stage: "FINAL" },
+];
+
+// Delay para no exceder el rate limit de 10 req/min del free tier
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   try {
     // @ts-expect-error Deno
@@ -67,17 +83,39 @@ serve(async (req) => {
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     if (!token) throw new Error("FOOTBALL_DATA_TOKEN is not configured");
 
-    const r = await fetch(`${API_BASE}/competitions/${COMPETITION}/matches`, {
-      headers: { "X-Auth-Token": token },
-    });
-    if (!r.ok) {
-      const body = await r.text();
-      throw new Error(`football-data error [${r.status}]: ${body}`);
-    }
-    const data = (await r.json()) as { matches: FdMatch[] };
-
     const supabase = createClient(supabaseUrl, serviceKey);
-    const rows = data.matches.map((m) => ({
+    const allMatches: FdMatch[] = [];
+
+    for (const req of STAGE_REQUESTS) {
+      const params = new URLSearchParams({ stage: req.stage });
+      if ("matchday" in req && req.matchday) params.set("matchday", String(req.matchday));
+
+      const r = await fetch(
+        `${API_BASE}/competitions/${COMPETITION}/matches?${params}`,
+        { headers: { "X-Auth-Token": token } },
+      );
+
+      if (!r.ok) {
+        const body = await r.text();
+        console.error(`football-data error for ${req.stage}: [${r.status}] ${body}`);
+        // Continuar con los demás stages aunque uno falle
+        await sleep(6200);
+        continue;
+      }
+
+      const data = (await r.json()) as { matches: FdMatch[] };
+      allMatches.push(...data.matches);
+
+      // Respetar rate limit: 10 req/min → esperar 6.2s entre llamadas
+      await sleep(6200);
+    }
+
+    // Deduplicar por id (por si un partido aparece en más de un request)
+    const uniqueMatches = Array.from(
+      new Map(allMatches.map((m) => [m.id, m])).values()
+    );
+
+    const rows = uniqueMatches.map((m) => ({
       external_id: String(m.id),
       stage: STAGE_MAP[m.stage] ?? "group",
       group_label: m.group ? m.group.replace("GROUP_", "") : null,
@@ -97,7 +135,7 @@ serve(async (req) => {
       .upsert(rows, { onConflict: "external_id" });
     if (error) throw error;
 
-    // Trigger scoring for any newly-finished matches
+    // Scoring para partidos terminados
     const { data: finished } = await supabase
       .from("matches")
       .select("id")

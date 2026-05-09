@@ -1,5 +1,5 @@
 // Hand-written database types matching db/migrations.
-// Regenerate later with `supabase gen types typescript --project-id <id> > src/lib/database.types.ts`.
+// Regenerate later with `supabase gen types typescript --project-id <id> > src/lib/database.types.ts`
 
 export type AppRole = "admin" | "member";
 export type MatchStage =
@@ -81,21 +81,18 @@ export interface Database {
         };
         Update: Partial<Database["public"]["Tables"]["matches"]["Insert"]>;
       };
+      // CAMBIO: predictions ya no tienen league_id
       predictions: {
         Row: {
           id: string;
-          league_id: string;
           user_id: string;
           match_id: string;
           home_score: number;
           away_score: number;
-          points_awarded: number | null;
-          is_perfect: boolean | null;
           created_at: string;
           updated_at: string;
         };
         Insert: {
-          league_id: string;
           user_id: string;
           match_id: string;
           home_score: number;
@@ -120,6 +117,52 @@ export interface Database {
         Row: { kind: BonusKind; correct_pick: string; resolved_at: string };
         Insert: { kind: BonusKind; correct_pick: string };
         Update: { correct_pick?: string };
+      };
+      // NUEVAS TABLAS
+      teams: {
+        Row: {
+          id: number;
+          name: string;
+          short_name: string | null;
+          tla: string | null;
+          crest: string | null;
+          updated_at: string;
+        };
+        Insert: { id: number; name: string; short_name?: string | null; tla?: string | null; crest?: string | null };
+        Update: Partial<Database["public"]["Tables"]["teams"]["Insert"]>;
+      };
+      players: {
+        Row: {
+          id: number;
+          name: string;
+          nationality: string | null;
+          team_id: number | null;
+          team_name: string | null;
+          position: string | null;
+          updated_at: string;
+        };
+        Insert: { id: number; name: string; nationality?: string | null; team_id?: number | null; team_name?: string | null; position?: string | null };
+        Update: Partial<Database["public"]["Tables"]["players"]["Insert"]>;
+      };
+      standings: {
+        Row: {
+          id: number;
+          group_name: string;
+          position: number;
+          team_id: number | null;
+          team_name: string;
+          team_crest: string | null;
+          played_games: number;
+          won: number;
+          draw: number;
+          lost: number;
+          goals_for: number;
+          goals_against: number;
+          points: number;
+          updated_at: string;
+        };
+        Insert: Omit<Database["public"]["Tables"]["standings"]["Row"], "id">;
+        Update: Partial<Database["public"]["Tables"]["standings"]["Insert"]>;
       };
     };
     Views: {
