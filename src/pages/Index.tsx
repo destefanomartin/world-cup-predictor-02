@@ -25,20 +25,37 @@ const Index = () => {
 
   const predByMatch = useMemo(() => {
     const map = new Map<string, any>();
-    for (const p of predictions) map.set(p.match_id, p);
+    for (const p of predictions as any[]) map.set(p.match_id, p);
     return map;
   }, [predictions]);
 
   // Lógica para agrupar los partidos por Fase/Grupo
+// Lógica CORREGIDA para agrupar los partidos por Fase/Grupo
   const groupedUpcoming = useMemo(() => {
     const groups: Record<string, any[]> = {};
     upcoming.forEach((m: any) => {
-      // Usamos stage o group_name (depende de cómo se llame tu columna en Supabase)
-      const groupKey = m.stage || m.group_name || "Fase de Grupos";
+      let groupKey = "Fase de Grupos";
+      
+      // Si tiene letra de grupo (A, B, C...), armamos el nombre
+      if (m.group_label) {
+        groupKey = `Grupo ${m.group_label}`;
+      } 
+      // Si no tiene grupo, traducimos las fases eliminatorias
+      else if (m.stage === "round_of_16") groupKey = "Octavos de Final";
+      else if (m.stage === "quarter_final") groupKey = "Cuartos de Final";
+      else if (m.stage === "semi_final") groupKey = "Semifinales";
+      else if (m.stage === "final") groupKey = "Final";
+      else if (m.stage === "third_place") groupKey = "Tercer Puesto";
+
       if (!groups[groupKey]) groups[groupKey] = [];
       groups[groupKey].push(m);
     });
-    return groups;
+    
+    // Ordenar los grupos alfabéticamente (Grupo A, Grupo B...)
+    return Object.keys(groups).sort().reduce((acc, key) => {
+      acc[key] = groups[key];
+      return acc;
+    }, {} as Record<string, any[]>);
   }, [upcoming]);
 
   return (
