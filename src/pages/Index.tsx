@@ -6,22 +6,20 @@ import { Hero } from "@/components/app/Hero";
 import { MatchCard } from "@/components/app/MatchCard";
 import { Leaderboard } from "@/components/app/Leaderboard";
 import { BonusBets } from "@/components/app/BonusBets";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useMyLeagues } from "@/hooks/useLeagues";
 import { useUpcomingMatches, useRecentMatches, useMyPredictions } from "@/hooks/useMatches";
 
 const STAGE_LABELS: Record<string, string> = {
-  group:        "Fase de Grupos",
-  round_of_32:  "Ronda de 32",
-  round_of_16:  "Octavos de Final",
-  quarter_final:"Cuartos de Final",
-  semi_final:   "Semifinales",
-  third_place:  "Tercer Puesto",
-  final:        "Final",
+  group:         "Fase de Grupos",
+  round_of_32:   "Ronda de 32",
+  round_of_16:   "Octavos",
+  quarter_final: "Cuartos",
+  semi_final:    "Semis",
+  third_place:   "3er Puesto",
+  final:         "Final",
 };
 
-// Orden de instancias para los tabs
 const STAGE_ORDER = [
   "group", "round_of_32", "round_of_16",
   "quarter_final", "semi_final", "third_place", "final",
@@ -38,7 +36,6 @@ const Index = () => {
   const { data: upcoming = [] } = useUpcomingMatches();
   const { data: recent = [] } = useRecentMatches();
 
-  // CAMBIO: predicciones globales, sin leagueId
   const { data: predictions = [] } = useMyPredictions();
   const predByMatch = useMemo(() => {
     const map = new Map<string, any>();
@@ -46,8 +43,7 @@ const Index = () => {
     return map;
   }, [predictions]);
 
-  // ── Filtros ──────────────────────────────────────────────────────────────
-  // Instancias que existen en los partidos actuales
+  // ── Filtros ───────────────────────────────────────────────────────────────
   const availableStages = useMemo(() => {
     const set = new Set(upcoming.map((m: any) => m.stage));
     return STAGE_ORDER.filter((s) => set.has(s));
@@ -56,14 +52,12 @@ const Index = () => {
   const [activeStage, setActiveStage] = useState<string>("group");
   const [activeGroup, setActiveGroup] = useState<string>("all");
 
-  // Cuando cambien los partidos, asegurar que el stage activo sea válido
   useEffect(() => {
     if (availableStages.length > 0 && !availableStages.includes(activeStage)) {
       setActiveStage(availableStages[0]);
     }
   }, [availableStages, activeStage]);
 
-  // Grupos disponibles para el stage seleccionado
   const availableGroups = useMemo(() => {
     if (activeStage !== "group") return [];
     const groups = upcoming
@@ -72,7 +66,6 @@ const Index = () => {
     return Array.from(new Set(groups)).sort();
   }, [upcoming, activeStage]);
 
-  // Partidos filtrados
   const filteredMatches = useMemo(() => {
     return upcoming.filter((m: any) => {
       if (m.stage !== activeStage) return false;
@@ -83,46 +76,32 @@ const Index = () => {
     });
   }, [upcoming, activeStage, activeGroup]);
 
-  // Conteo de predicciones hechas en la vista actual
   const predictedCount = filteredMatches.filter((m: any) => predByMatch.has(m.id)).length;
 
   return (
     <div className="min-h-screen bg-background font-sans text-foreground">
       <Header />
       <main>
-        <Hero leagueId={leagueId ?? ''} />
-
-        {/* Selector de liga (solo afecta leaderboard y bonus bets) */}
-        {leagues.length > 1 && (
-          <div className="container -mt-8 mb-4 flex items-center justify-end gap-2">
-            <span className="text-xs uppercase tracking-wider text-muted-foreground">League:</span>
-            <Select value={leagueId ?? undefined} onValueChange={(v) => setLeagueId(v)}>
-              <SelectTrigger className="w-56 bg-card/50">
-                <SelectValue placeholder="Select league" />
-              </SelectTrigger>
-              <SelectContent>
-                {leagues.map((l: any) => (
-                  <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        )}
+        {/* El Hero maneja el selector de liga internamente */}
+        <Hero
+          leagueId={leagueId}
+          leagues={leagues}
+          onLeagueChange={setLeagueId}
+        />
 
         {leagues.length === 0 && (
-          <div className="container">
+          <div className="container mt-8">
             <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 p-8 text-center">
               <h2 className="font-display text-xl font-bold">Join or create your first league</h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                You need a league to track your score. Your predictions are saved globally —
-                they'll count in every league you join.
+                You need a league to track your score. Your predictions count in every league you join.
               </p>
               <Button asChild className="mt-4"><Link to="/leagues">Manage leagues</Link></Button>
             </div>
           </div>
         )}
 
-        {/* ── Sección de partidos con filtros ── */}
+        {/* ── Partidos con filtros ── */}
         <section id="predictions" className="container py-16">
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -132,18 +111,16 @@ const Index = () => {
               <h2 className="font-display text-3xl font-bold md:text-4xl">Your Predictions</h2>
               <p className="mt-1 text-sm text-muted-foreground">
                 {filteredMatches.length > 0
-                  ? <>{predictedCount} of {filteredMatches.length} predicted</>
-                  : "No matches in this view"}
+                  ? <>{predictedCount} de {filteredMatches.length} predichos</>
+                  : "No hay partidos en este filtro"}
               </p>
             </div>
             <Button asChild variant="outline" size="sm" className="hidden md:flex gap-2 shrink-0">
-              <Link to="/tournament">
-                <BarChart3 className="h-4 w-4" /> Group Standings
-              </Link>
+              <Link to="/tournament"><BarChart3 className="h-4 w-4" /> Group Standings</Link>
             </Button>
           </div>
 
-          {/* ── Filtros de instancia (tabs) ── */}
+          {/* Tabs de instancia */}
           {availableStages.length > 1 && (
             <div className="mb-4 flex flex-wrap gap-2">
               {availableStages.map((stage) => (
@@ -162,9 +139,9 @@ const Index = () => {
             </div>
           )}
 
-          {/* ── Filtro de grupo (solo en fase de grupos) ── */}
+          {/* Filtro de grupo */}
           {activeStage === "group" && availableGroups.length > 1 && (
-            <div className="mb-6 flex items-center gap-2 flex-wrap">
+            <div className="mb-6 flex flex-wrap items-center gap-2">
               <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <Filter className="h-3 w-3" /> Grupo:
               </span>
@@ -194,11 +171,12 @@ const Index = () => {
             </div>
           )}
 
-          {/* ── Grilla de partidos ── */}
+          {/* Grilla */}
           {upcoming.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 p-8 text-center">
               <p className="text-sm text-muted-foreground">
-                No hay partidos aún — corré la edge function <code className="font-mono bg-secondary px-1.5 py-0.5 rounded">sync-matches</code> para poblar el calendario.
+                No hay partidos aún — corré la edge function{" "}
+                <code className="rounded bg-secondary px-1.5 py-0.5 font-mono">sync-matches</code>.
               </p>
             </div>
           ) : filteredMatches.length === 0 ? (
@@ -208,17 +186,13 @@ const Index = () => {
           ) : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {filteredMatches.map((m: any) => (
-                <MatchCard
-                  key={m.id}
-                  match={m}
-                  prediction={predByMatch.get(m.id)}
-                />
+                <MatchCard key={m.id} match={m} prediction={predByMatch.get(m.id)} />
               ))}
             </div>
           )}
         </section>
 
-        {/* ── Dashboard: leaderboard + bonus + resultados ── */}
+        {/* ── Dashboard ── */}
         <section id="dashboard" className="container grid gap-8 pb-16 lg:grid-cols-[1.4fr_1fr]">
           <div id="leaderboard">
             <Leaderboard leagueId={leagueId} leagueName={currentLeague?.name} />
@@ -239,10 +213,7 @@ const Index = () => {
                   {recent.map((m: any) => {
                     const p = predByMatch.get(m.id);
                     return (
-                      <div
-                        key={m.id}
-                        className="flex items-center justify-between rounded-xl bg-background/40 p-3 text-sm"
-                      >
+                      <div key={m.id} className="flex items-center justify-between rounded-xl bg-background/40 p-3 text-sm">
                         <div className="flex items-center gap-2 min-w-0 overflow-hidden">
                           <span className="font-medium truncate max-w-[80px]">{m.home_team}</span>
                           <span className="font-display font-bold text-foreground shrink-0">
