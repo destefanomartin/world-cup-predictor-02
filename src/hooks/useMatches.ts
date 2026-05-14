@@ -2,11 +2,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/providers/AuthProvider";
 
+// Todos los partidos scheduled/live, sin límite de 50
 export const useUpcomingMatches = () =>
   useQuery({
     queryKey: ["matches", "upcoming"],
     queryFn: async () => {
-      // CAMBIO: removido .limit(50) — traemos todos los partidos scheduled/live
       const { data, error } = await supabase
         .from("matches")
         .select("*")
@@ -32,7 +32,7 @@ export const useRecentMatches = () =>
     },
   });
 
-// CAMBIO: las predicciones ya no tienen league_id — son globales por usuario
+// CAMBIO: predicciones globales — ya no dependen de league_id
 export const useMyPredictions = () => {
   const { user } = useAuth();
   return useQuery({
@@ -49,7 +49,7 @@ export const useMyPredictions = () => {
   });
 };
 
-// CAMBIO: save prediction sin league_id
+// CAMBIO: guardar sin league_id
 export const useSavePrediction = () => {
   const qc = useQueryClient();
   const { user } = useAuth();
