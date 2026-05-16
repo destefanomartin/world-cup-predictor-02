@@ -93,8 +93,8 @@ const Auth = () => {
       <div className="container flex min-h-screen items-center justify-center py-12">
         <div className="w-full max-w-md rounded-2xl border border-border/60 bg-gradient-card p-8 shadow-elegant">
           <div className="mb-8 flex flex-col items-center text-center">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 overflow-hidden">
-              <img src="/icon1.png" alt="logo" className="h-10 w-10 object-contain" />
+            <div className="mb-3 flex h-14 w-14 items-center justify-center">
+              <img src="/icon1.png" alt="logo" className="h-14 w-14 object-contain" />
             </div>
             <h1 className="font-display text-2xl font-bold">PRODE 2026</h1>
             <p className="text-sm text-muted-foreground">Predecí el Mundial con tus amigos</p>

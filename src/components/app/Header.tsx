@@ -19,8 +19,8 @@ export const Header = () => {
     <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl">
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-pitch shadow-glow overflow-hidden">
-            <img src="/icon1.png" alt="logo" className="h-7 w-7 object-contain" />
+          <div className="flex h-9 w-9 items-center justify-center">
+            <img src="/icon1.png" alt="logo" className="h-9 w-9 object-contain" />
           </div>
           <div>
             <p className="font-display text-base font-bold leading-none">PRODE 2026</p>
