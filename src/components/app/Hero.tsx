@@ -46,7 +46,7 @@ export const Hero = ({ leagueId, leagues, onLeagueChange }: HeroProps) => {
             Liga · {rows.length} jugadores · Temporada activa
           </div>
 
-          <h2 className="font-display text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl">
+          <h2 className="font-display text-2xl font-bold leading-snug tracking-tight md:text-3xl">
             Pone todos los resultados que despues te olvidas y lo editas despues Balanho.
             <span className="block bg-gradient-pitch bg-clip-text text-transparent">
               Si queres ganar, pone todo lo contrario que ponga Sampi.
