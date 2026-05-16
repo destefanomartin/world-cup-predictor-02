@@ -49,7 +49,7 @@ export const Hero = ({ leagueId, leagues, onLeagueChange }: HeroProps) => {
           <h2 className="font-display text-2xl font-bold leading-snug tracking-tight md:text-3xl">
             No te olvides de cargar todos los resultados, no hagas la de Balanho.
             <span className="block bg-gradient-pitch bg-clip-text text-transparent">
-              Si queres ganar, pone todo lo contrario que ponga Sampi.
+              Si queres ganar, pone todo lo contrario a lo que ponga Sampi.
             </span>
           </h2>
 
