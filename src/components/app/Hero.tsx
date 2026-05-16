@@ -47,17 +47,26 @@ export const Hero = ({ leagueId, leagues, onLeagueChange }: HeroProps) => {
           </div>
 
           <h2 className="font-display text-2xl font-bold leading-snug tracking-tight md:text-3xl">
-            Pone todos los resultados que despues te olvidas y lo editas despues Balanho.
+            No te olvides de cargar todos los resultados, no hagas la de Balanho.
             <span className="block bg-gradient-pitch bg-clip-text text-transparent">
               Si queres ganar, pone todo lo contrario que ponga Sampi.
             </span>
           </h2>
 
-          <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground">
-            Los puntos por aciertos y aciertos de resultados se calculan automáticamente (3 para plenos, 1 para resultados).
-            Las apuestas extras otorgan 5 puntos una vez finalizado todo.
-            Dino no puede ganar el prode, por lo tanto se procedera a la corrupcion y ganara Luchoku.
-          </p>
+          <ul className="mx-auto mt-6 max-w-xl space-y-2 text-sm text-muted-foreground text-left">
+            <li className="flex items-start gap-2">
+              <span className="mt-0.5 shrink-0">⚽</span>
+              <span><strong className="text-foreground">Pleno</strong> (resultado exacto): <strong className="text-foreground">3 pts</strong> · <strong className="text-foreground">Resultado</strong> (ganador/empate): <strong className="text-foreground">1 pt</strong></span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-0.5 shrink-0">🎯</span>
+              <span>Las <strong className="text-foreground">apuestas extra</strong> otorgan <strong className="text-foreground">5 pts</strong> cada una al finalizar el torneo.</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-0.5 shrink-0">⚖️</span>
+              <span>Dino no puede ganar el prode — se procederá a la corrupción y ganará Luchoku.</span>
+            </li>
+          </ul>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Button
