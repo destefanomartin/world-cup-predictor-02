@@ -46,12 +46,12 @@ export const Hero = ({ leagueId, leagues, onLeagueChange }: HeroProps) => {
             Liga · {rows.length} jugadores · Temporada activa
           </div>
 
-          <h1 className="font-display text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl">
+          <h2 className="font-display text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl">
             Pone todos los resultados que despues te olvidas y lo editas despues Balanho.
             <span className="block bg-gradient-pitch bg-clip-text text-transparent">
               Si queres ganar, pone todo lo contrario que ponga Sampi.
             </span>
-          </h1>
+          </h2>
 
           <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground">
             Los puntos por aciertos y aciertos de resultados se calculan automáticamente (3 para plenos, 1 para resultados).

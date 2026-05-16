@@ -29,8 +29,8 @@ export const Header = () => {
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
-          <a href="#predictions" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Predicciones</a>
-          <a href="#leaderboard" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Tabla de posiciones</a>
+          <a href="/#predictions" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Predicciones</a>
+          <a href="/#leaderboard" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Tabla de posiciones</a>
           <Link to="/leagues" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Ligas</Link>
           <Link to="/tournament" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary flex items-center gap-1">
             <BarChart3 className="h-3.5 w-3.5" /> Posiciones
