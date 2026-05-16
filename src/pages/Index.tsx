@@ -92,11 +92,11 @@ const Index = () => {
         {leagues.length === 0 && (
           <div className="container mt-8">
             <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 p-8 text-center">
-              <h2 className="font-display text-xl font-bold">Join or create your first league</h2>
+              <h2 className="font-display text-xl font-bold">Uníte o creá tu primera liga</h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                You need a league to track your score. Your predictions count in every league you join.
+                Necesítas una liga para seguir tu puntaje. Tus predicciones cuentan en cada liga a la que te sumás.
               </p>
-              <Button asChild className="mt-4"><Link to="/leagues">Manage leagues</Link></Button>
+              <Button asChild className="mt-4"><Link to="/leagues">Administrar ligas</Link></Button>
             </div>
           </div>
         )}
@@ -106,9 +106,9 @@ const Index = () => {
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="mb-2 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary">
-                <Flame className="h-3.5 w-3.5" /> Upcoming
+                <Flame className="h-3.5 w-3.5" /> Próximos
               </div>
-              <h2 className="font-display text-3xl font-bold md:text-4xl">Your Predictions</h2>
+              <h2 className="font-display text-3xl font-bold md:text-4xl">Tus Predicciones</h2>
               <p className="mt-1 text-sm text-muted-foreground">
                 {filteredMatches.length > 0
                   ? <>{predictedCount} de {filteredMatches.length} predichos</>
@@ -116,7 +116,7 @@ const Index = () => {
               </p>
             </div>
             <Button asChild variant="outline" size="sm" className="hidden md:flex gap-2 shrink-0">
-              <Link to="/tournament"><BarChart3 className="h-4 w-4" /> Group Standings</Link>
+              <Link to="/tournament"><BarChart3 className="h-4 w-4" /> Posiciones de grupos</Link>
             </Button>
           </div>
 
@@ -204,10 +204,10 @@ const Index = () => {
             <div className="rounded-2xl border border-border/60 bg-gradient-card p-5 shadow-elegant">
               <div className="mb-4 flex items-center gap-2">
                 <CalendarDays className="h-4 w-4 text-primary" />
-                <h3 className="font-display text-lg font-bold">Recent Results</h3>
+                <h3 className="font-display text-lg font-bold">Resultados recientes</h3>
               </div>
               {recent.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No finished matches yet.</p>
+                <p className="text-sm text-muted-foreground">Todavía no hay partidos finalizados.</p>
               ) : (
                 <div className="space-y-3">
                   {recent.map((m: any) => {
@@ -236,7 +236,7 @@ const Index = () => {
         </section>
 
         <footer className="border-t border-border/40 py-8 text-center text-xs text-muted-foreground">
-          <p>Pitch Picks · Built for friends · World Cup 2026</p>
+          <p>PRODE 2026 · Hecho para amigos · Mundial 2026</p>
         </footer>
       </main>
     </div>

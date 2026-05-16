@@ -16,14 +16,14 @@ export const AvatarUpload = () => {
         const file = e.target.files?.[0];
         if (!file) return;
         if (file.size > 2 * 1024 * 1024) {
-            toast({ title: "Max 2MB", variant: "destructive" });
+            toast({ title: "Máximo 2MB", variant: "destructive" });
             return;
         }
         try {
             await updateAvatar.mutateAsync(file);
-            toast({ title: "Avatar updated" });
+            toast({ title: "Avatar actualizado" });
         } catch (err) {
-            toast({ title: "Upload failed", description: (err as Error).message, variant: "destructive" });
+            toast({ title: "Error al subir imagen", description: (err as Error).message, variant: "destructive" });
         }
     };
 
@@ -32,9 +32,9 @@ export const AvatarUpload = () => {
         try {
             await updateName.mutateAsync(nameVal.trim());
             setEditingName(false);
-            toast({ title: "Name updated" });
+            toast({ title: "Nombre actualizado" });
         } catch (err) {
-            toast({ title: "Error", description: (err as Error).message, variant: "destructive" });
+            toast({ title: "Error al guardar", description: (err as Error).message, variant: "destructive" });
         }
     };
 
@@ -79,8 +79,8 @@ export const AvatarUpload = () => {
                             onKeyDown={(e) => e.key === "Enter" && handleNameSave()}
                             className="h-8 rounded-lg border border-border/60 bg-background px-2 text-sm font-semibold focus:outline-none focus:border-primary"
                         />
-                        <button onClick={handleNameSave} className="text-xs text-primary font-semibold">Save</button>
-                        <button onClick={() => setEditingName(false)} className="text-xs text-muted-foreground">Cancel</button>
+                        <button onClick={handleNameSave} className="text-xs text-primary font-semibold">Guardar</button>
+                        <button onClick={() => setEditingName(false)} className="text-xs text-muted-foreground">Cancelar</button>
                     </div>
                 ) : (
                     <button
@@ -88,7 +88,7 @@ export const AvatarUpload = () => {
                         className="text-left hover:text-primary transition-colors"
                     >
                         <p className="font-semibold text-sm">{profile?.display_name ?? "—"}</p>
-                        <p className="text-[11px] text-muted-foreground">Click to edit name</p>
+                        <p className="text-[11px] text-muted-foreground">Clic para editar nombre</p>
                     </button>
                 )}
             </div>

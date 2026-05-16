@@ -15,17 +15,17 @@ export const Hero = ({ leagueId, leagues, onLeagueChange }: HeroProps) => {
   const { user } = useAuth();
   const { data: rows = [] } = useLeaderboard(leagueId);
 
-  const myRow    = rows.find((r) => r.user_id === user?.id);
-  const myRank   = myRow ? rows.indexOf(myRow) + 1 : null;
-  const rank     = myRank != null ? `#${myRank}` : "–";
-  const points   = myRow?.total_points != null ? String(myRow.total_points) : "0";
-  const perfects = myRow?.perfects     != null ? String(myRow.perfects)     : "0";
+  const myRow = rows.find((r) => r.user_id === user?.id);
+  const myRank = myRow ? rows.indexOf(myRow) + 1 : null;
+  const rank = myRank != null ? `#${myRank}` : "–";
+  const points = myRow?.total_points != null ? String(myRow.total_points) : "0";
+  const perfects = myRow?.perfects != null ? String(myRow.perfects) : "0";
 
   return (
     <section
       className="relative"
-      // SIN overflow-hidden para que el Select dropdown no quede cortado.
-      // El recorte visual del fondo lo maneja el pseudo-elemento de abajo.
+    // SIN overflow-hidden para que el Select dropdown no quede cortado.
+    // El recorte visual del fondo lo maneja el pseudo-elemento de abajo.
     >
       {/* Fondo — posición absoluta, no afecta al dropdown */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -43,19 +43,20 @@ export const Hero = ({ leagueId, leagues, onLeagueChange }: HeroProps) => {
         <div className="mx-auto max-w-3xl text-center animate-fade-up">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium text-primary">
             <Sparkles className="h-3.5 w-3.5" />
-            Private league · {rows.length} players · Season open
+            Liga · {rows.length} jugadores · Temporada activa
           </div>
 
           <h1 className="font-display text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl">
-            Predict every match.
+            Pone todos los resultados que despues te olvidas y lo editas despues Balanho.
             <span className="block bg-gradient-pitch bg-clip-text text-transparent">
-              Outsmart your friends.
+              Si queres ganar, pone todo lo contrario que ponga Sampi.
             </span>
           </h1>
 
           <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground">
-            The most fun way to follow the FIFA World Cup 2026 with your crew.
-            Score predictions, bonus bets, and a live leaderboard — all automated.
+            Los puntos por aciertos y aciertos de resultados se calculan automáticamente (3 para plenos, 1 para resultados).
+            Las apuestas extras otorgan 5 puntos una vez finalizado todo.
+            Dino no puede ganar el prode, por lo tanto se procedera a la corrupcion y ganara Luchoku.
           </p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -64,7 +65,7 @@ export const Hero = ({ leagueId, leagues, onLeagueChange }: HeroProps) => {
               className="bg-gradient-pitch text-primary-foreground shadow-glow hover:opacity-90"
               onClick={() => document.getElementById("predictions")?.scrollIntoView({ behavior: "smooth" })}
             >
-              Make Today's Picks
+              Hace como el pino y predecite unos resultados.
             </Button>
             <Button
               size="lg"
@@ -72,7 +73,7 @@ export const Hero = ({ leagueId, leagues, onLeagueChange }: HeroProps) => {
               className="border-border/60 bg-card/50 backdrop-blur"
               onClick={() => document.getElementById("leaderboard")?.scrollIntoView({ behavior: "smooth" })}
             >
-              <Users className="mr-2 h-4 w-4" /> See Leaderboard
+              <Users className="mr-2 h-4 w-4" /> Mira el tabla
             </Button>
           </div>
 
@@ -106,9 +107,9 @@ export const Hero = ({ leagueId, leagues, onLeagueChange }: HeroProps) => {
             )}
 
             <div className="grid grid-cols-3 gap-6">
-              <Stat label="Tu posición"    value={rank}     accent />
-              <Stat label="Puntos totales" value={points}   />
-              <Stat label="Plenos"         value={perfects} />
+              <Stat label="Tu posición" value={rank} accent />
+              <Stat label="Puntos totales" value={points} />
+              <Stat label="Plenos" value={perfects} />
             </div>
           </div>
         </div>
@@ -120,9 +121,8 @@ export const Hero = ({ leagueId, leagues, onLeagueChange }: HeroProps) => {
 const Stat = ({ label, value, accent }: { label: string; value: string; accent?: boolean }) => (
   <div className="text-center">
     <p
-      className={`font-display text-3xl font-bold md:text-4xl ${
-        accent ? "bg-gradient-trophy bg-clip-text text-transparent" : "text-foreground"
-      }`}
+      className={`font-display text-3xl font-bold md:text-4xl ${accent ? "bg-gradient-trophy bg-clip-text text-transparent" : "text-foreground"
+        }`}
     >
       {value}
     </p>

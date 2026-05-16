@@ -10,6 +10,7 @@ import Auth from "./pages/Auth.tsx";
 import Leagues from "./pages/Leagues.tsx";
 import Tournament from "./pages/Tournament.tsx";
 import Profile from "./pages/Profile.tsx";
+import ResetPassword from "./pages/ResetPassword.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/auth" element={<Auth />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
             <Route path="/leagues" element={<ProtectedRoute><Leagues /></ProtectedRoute>} />
             <Route path="/tournament" element={<ProtectedRoute><Tournament /></ProtectedRoute>} />

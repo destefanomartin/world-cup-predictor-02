@@ -27,18 +27,18 @@ const formatKickoff = (iso: string) => {
   tomorrow.setDate(today.getDate() + 1);
   const isTomorrow = d.toDateString() === tomorrow.toDateString();
   const time = d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  if (sameDay) return `Today · ${time}`;
-  if (isTomorrow) return `Tomorrow · ${time}`;
-  return d.toLocaleDateString([], { month: "short", day: "numeric" }) + ` · ${time}`;
+  if (sameDay) return `Hoy · ${time}`;
+  if (isTomorrow) return `Mañana · ${time}`;
+  return d.toLocaleDateString("es", { month: "short", day: "numeric" }) + ` · ${time}`;
 };
 
 const STAGE_LABEL: Record<string, string> = {
-  group: "Group",
+  group: "Grupo",
   round_of_32: "R32",
   round_of_16: "R16",
-  quarter_final: "QF",
+  quarter_final: "CF",
   semi_final: "SF",
-  third_place: "3rd",
+  third_place: "3°",
   final: "Final",
 };
 
@@ -77,9 +77,9 @@ export const MatchCard = ({ match, prediction }: Props) => {
         home_score: Number(home),
         away_score: Number(away),
       });
-      toast({ title: "Prediction saved" });
+      toast({ title: "Predicción guardada" });
     } catch (err) {
-      toast({ title: "Could not save", description: (err as Error).message, variant: "destructive" });
+      toast({ title: "No se pudo guardar", description: (err as Error).message, variant: "destructive" });
     }
   };
 
@@ -132,9 +132,9 @@ export const MatchCard = ({ match, prediction }: Props) => {
           disabled={save.isPending || home === "" || away === ""}
           className="mt-4 w-full bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground"
         >
-          {save.isPending ? "Saving..." : prediction
-            ? <><Check className="mr-1 h-4 w-4" /> Update Prediction</>
-            : "Save Prediction"}
+          {save.isPending ? "Guardando..." : prediction
+            ? <><Check className="mr-1 h-4 w-4" /> Actualizar predicción</>
+            : "Guardar predicción"}
         </Button>
       )}
 
@@ -145,7 +145,7 @@ export const MatchCard = ({ match, prediction }: Props) => {
           </span>
           {prediction && (
             <span className={`font-semibold ${prediction.is_perfect ? "text-accent" : "text-muted-foreground"}`}>
-              {prediction.is_perfect ? "⭐ Perfect" : `${prediction.home_score}–${prediction.away_score}`}
+              {prediction.is_perfect ? "⭐ Pleno" : `${prediction.home_score}–${prediction.away_score}`}
             </span>
           )}
         </div>

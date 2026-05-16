@@ -23,17 +23,17 @@ export const Header = () => {
             <Trophy className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
-            <p className="font-display text-base font-bold leading-none">Pitch Picks</p>
-            <p className="text-[10px] uppercase tracking-widest text-muted-foreground">World Cup 2026</p>
+            <p className="font-display text-base font-bold leading-none">PRODE 2026</p>
+            <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Mundial 2026</p>
           </div>
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
-          <a href="#predictions" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Predictions</a>
-          <a href="#leaderboard" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Leaderboard</a>
-          <Link to="/leagues" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Leagues</Link>
+          <a href="#predictions" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Predicciones</a>
+          <a href="#leaderboard" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Tabla de posiciones</a>
+          <Link to="/leagues" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Ligas</Link>
           <Link to="/tournament" className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary flex items-center gap-1">
-            <BarChart3 className="h-3.5 w-3.5" /> Standings
+            <BarChart3 className="h-3.5 w-3.5" /> Posiciones
           </Link>
         </nav>
 

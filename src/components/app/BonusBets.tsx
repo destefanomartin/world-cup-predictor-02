@@ -7,12 +7,12 @@ import { useTeams } from "@/hooks/useTournament";
 import type { BonusKind } from "@/lib/database.types";
 
 const KIND_CONFIG: Record<BonusKind, { label: string; emoji: string; placeholder: string; useTeam: boolean }> = {
-  top_scorer: { label: "Top Scorer", emoji: "⚽", placeholder: "Player name...", useTeam: false },
-  mvp: { label: "Best Player (MVP)", emoji: "🏆", placeholder: "Player name...", useTeam: false },
-  best_goalkeeper: { label: "Best Goalkeeper", emoji: "🧤", placeholder: "Player name...", useTeam: false },
-  most_assists: { label: "Most Assists", emoji: "🎯", placeholder: "Player name...", useTeam: false },
-  champion: { label: "Champion", emoji: "🥇", placeholder: "Country name...", useTeam: true },
-  runner_up: { label: "Runner-up", emoji: "🥈", placeholder: "Country name...", useTeam: true },
+  top_scorer: { label: "Goleador", emoji: "⚽", placeholder: "Nombre del jugador...", useTeam: false },
+  mvp: { label: "Mejor Jugador (MVP)", emoji: "🏆", placeholder: "Nombre del jugador...", useTeam: false },
+  best_goalkeeper: { label: "Mejor Arquero", emoji: "🧤", placeholder: "Nombre del jugador...", useTeam: false },
+  most_assists: { label: "Más Asistencias", emoji: "🎯", placeholder: "Nombre del jugador...", useTeam: false },
+  champion: { label: "Campeón", emoji: "🥇", placeholder: "Nombre del país...", useTeam: true },
+  runner_up: { label: "Subcampeón", emoji: "🥈", placeholder: "Nombre del país...", useTeam: true },
 };
 
 const KINDS = Object.keys(KIND_CONFIG) as BonusKind[];
@@ -60,14 +60,14 @@ export const BonusBets = ({ leagueId }: { leagueId: string | null }) => {
   const handleSave = async (kind: BonusKind) => {
     const pick = valueFor(kind).trim();
     if (!pick || !leagueId) {
-      toast({ title: leagueId ? "Empty pick" : "Pick a league first", variant: "destructive" });
+      toast({ title: leagueId ? "Predicción vacía" : "Primero seleccioná una liga", variant: "destructive" });
       return;
     }
     try {
       await save.mutateAsync({ kind, pick });
-      toast({ title: "Saved!" });
+      toast({ title: "¡Guardado!" });
     } catch (err) {
-      toast({ title: "Error", description: (err as Error).message, variant: "destructive" });
+      toast({ title: "Error al guardar", description: (err as Error).message, variant: "destructive" });
     }
   };
 
@@ -77,11 +77,11 @@ export const BonusBets = ({ leagueId }: { leagueId: string | null }) => {
     <div className="rounded-2xl border border-border/60 bg-gradient-card p-5 shadow-elegant">
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h3 className="font-display text-xl font-bold">Bonus Bets</h3>
-          <p className="text-xs text-muted-foreground">Tournament-long predictions</p>
+          <h3 className="font-display text-xl font-bold">Apuestas Extra</h3>
+          <p className="text-xs text-muted-foreground">Predicciones para todo el torneo</p>
         </div>
         <span className="rounded-full bg-accent/20 px-3 py-1 text-xs font-semibold text-accent">
-          {filled} / {KINDS.length} set
+          {filled} / {KINDS.length} completadas
         </span>
       </div>
       <div className="grid gap-3">
@@ -104,7 +104,7 @@ export const BonusBets = ({ leagueId }: { leagueId: string | null }) => {
                     placeholder={cfg.placeholder} className="h-8 border-0 bg-transparent px-0 text-sm font-semibold focus-visible:ring-0" />
                 )}
               </div>
-              <Button size="sm" variant="ghost" onClick={() => handleSave(kind)} className="text-primary shrink-0">Save</Button>
+              <Button size="sm" variant="ghost" onClick={() => handleSave(kind)} className="text-primary shrink-0">Guardar</Button>
             </div>
           );
         })}

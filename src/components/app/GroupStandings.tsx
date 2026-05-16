@@ -24,14 +24,14 @@ const GroupTable = ({ group, rows }: { group: string; rows: StandingRow[] }) => 
         <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/15 text-sm font-bold text-primary">
           {letter}
         </span>
-        <span className="font-display font-semibold text-sm">Group {letter}</span>
+        <span className="font-display font-semibold text-sm">Grupo {letter}</span>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border/30">
               <th className="px-3 py-2 text-left text-[11px] uppercase tracking-wider text-muted-foreground w-6">#</th>
-              <th className="px-3 py-2 text-left text-[11px] uppercase tracking-wider text-muted-foreground">Team</th>
+              <th className="px-3 py-2 text-left text-[11px] uppercase tracking-wider text-muted-foreground">Equipo</th>
               <th className="px-2 py-2 text-center text-[11px] uppercase tracking-wider text-muted-foreground">PJ</th>
               <th className="px-2 py-2 text-center text-[11px] uppercase tracking-wider text-muted-foreground">G</th>
               <th className="px-2 py-2 text-center text-[11px] uppercase tracking-wider text-muted-foreground">E</th>
@@ -111,9 +111,9 @@ export const GroupStandings = () => {
     return (
       <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 p-8 text-center">
         <p className="text-sm text-muted-foreground">
-          No standings yet. Run the{" "}
+          Todavía no hay posiciones. Ejecutá la función{" "}
           <code className="rounded bg-secondary px-1.5 py-0.5 font-mono text-xs">sync-standings</code>{" "}
-          edge function to populate group tables.
+          para poblar las tablas de grupos.
         </p>
       </div>
     );
