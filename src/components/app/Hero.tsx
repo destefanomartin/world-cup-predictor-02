@@ -82,7 +82,7 @@ export const Hero = ({ leagueId, leagues, onLeagueChange }: HeroProps) => {
               className="border-border/60 bg-card/50 backdrop-blur"
               onClick={() => document.getElementById("leaderboard")?.scrollIntoView({ behavior: "smooth" })}
             >
-              <Users className="mr-2 h-4 w-4" /> Mira el tabla
+              <Users className="mr-2 h-4 w-4" /> Mira la tabla
             </Button>
           </div>
 
